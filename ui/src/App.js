@@ -35,23 +35,6 @@ class Projects extends React.Component {
 	}
 }
 
-/* Return data at given url */
-async function GetData(url) {
-
-	// fetch from url, but wait for the data
-	const response = await fetch(url);
-	// obtain json and parse it
-	var data = JSON.parse(JSON.stringify(await response.json()));
-	// return the json
-
-	console.log("Project 0: " + data.proj0[PROJ_NAME]);
-	console.log("Project 1: " + data.proj1[PROJ_NAME]);
-	console.log("Project 2: " + data.proj2[PROJ_NAME]);
-	console.log("Project 3: " + data.proj3[PROJ_NAME]);
-
-	return data;
-}
-
 // Place data into a stored list
 class ProjectData extends React.Component {
 
@@ -65,12 +48,12 @@ class ProjectData extends React.Component {
 		};
 
 		// get and print data from "init"
-		GetData("init");
+		GetInitialData(props);
 
-		this.state.project_list.push([0, "Project 0", "User 1", "HWSet 1: 50/100", "HWSet 2: 30/100"])
-		this.state.project_list.push([1, "Project 1", "User 2", "HWSet 1: 50/100", "HWSet 2: 0/100"])
-		this.state.project_list.push([2, "Project 2", "User 3", "HWSet 1: 50/50", "HWSet 2: 30/40"])
-		this.state.project_list.push([3, "Project 3", "User 4", "HWSet 1: 50/70", "HWSet 2: 30/50"])
+		this.state.project_list.push([0, "Project 0", "User 1", "HWSet1: 50/100", "HWSet2: 30/100"])
+		this.state.project_list.push([1, "Project 1", "User 2", "HWSet1: 50/100", "HWSet2: 0/100"])
+		this.state.project_list.push([2, "Project 2", "User 3", "HWSet1: 50/50", "HWSet2: 30/40"])
+		this.state.project_list.push([3, "Project 3", "User 4", "HWSet1: 50/70", "HWSet2: 30/50"])
 	}
 
 	// Create a single project with given data
@@ -125,11 +108,27 @@ class ProjectData extends React.Component {
 
 	// Check-In HWSet
 	handleCheckIn(i) {
+		/* Get current list and hw selection index */
 		const project_list = this.state.project_list.slice();
-		project_list[i][3] = "HWSet 1: 100/100";
-		this.setState({
-			project_list: project_list
-		});
+
+		/* Get input value (chk-in value) and make sure it's not empty */
+		const check_in_val = document.getElementById("check_in:" + project_list[i][1]).value;
+		if(check_in_val !== "" && !isNaN(check_in_val)) {
+
+			/* Get current value and capacity of hw selection */
+
+			project_list[i][3] = "HWSet 1: " + check_in_val + "/100";
+
+			/* Set chk-in values to state */
+			this.setState({
+				project_list: project_list
+			});
+
+			/* Clear input text fields */
+			document.getElementById("check_in:" + project_list[i][1]).value = "";
+		}
+
+		GetCheckInData(project_list[i], parseInt(check_in_val));
 	}
 
 	// Check-In HWSet
@@ -139,10 +138,6 @@ class ProjectData extends React.Component {
 		this.setState({
 			project_list: project_list
 		});
-
-		// fetch("/hardware/proj_id=<projectId>/chk_out=<qty>")
-  		// .then((response) => response.json())
-		// .then(data => console.log(data));
 	}
 
 	// Add new HWSet to Data
@@ -180,7 +175,59 @@ class ProjectData extends React.Component {
 
 }
 
-// Project: Format Project with props given
+// 
+
+/* Return data at given url */
+async function GetInitialData(props) {
+
+	// fetch from url, but wait for the data
+	const response = await fetch("init");
+	// obtain json and parse it
+	var data = JSON.parse(JSON.stringify(await response.json()));
+	// return the json
+
+	console.log("Project 0: " + data.proj0[PROJ_NAME]);
+	console.log("Project 1: " + data.proj1[PROJ_NAME]);
+	console.log("Project 2: " + data.proj2[PROJ_NAME]);
+	console.log("Project 3: " + data.proj3[PROJ_NAME]);
+
+	return data;
+}
+
+/* Return data at given url */
+async function GetCheckInData(project_list, val) {
+
+	// console.log(project_list[1]);
+	// console.log(val);
+
+	const newData = {"HWSet1": val, "HWSet2": 50};
+	console.log(newData);
+
+	// const result = await fetch('/hardware', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(newData)
+    // })
+
+	// const resultInJson = await result.json();
+	// console.log(resultInJson);
+
+	// // fetch from url, but wait for the data
+	// const response = await fetch("/hardware/proj_id=<HWSet1>/chk_out=<qty>");
+	// // obtain json and parse it
+	// var data = JSON.parse(JSON.stringify(await response.json()));
+	// return the json
+
+	// console.log(data.proj0[PROJ_NAME]);
+
+	return newData;
+}
+
+// HTML Functions
+
+/* Project: Format Project with props given */
 function Project(props) {
 	return (
 		<div className="project">
@@ -207,13 +254,27 @@ function Project(props) {
 			</div>
 			{/* Check In */}
 			<div className="column">
-				<input className="hwInput" type="text" placeholder="Enter Value" />
-				<button className="checkBtn" type="button" onClick={props.onCheckInClick}>Check In</button>
+				<input className="hwInput"
+					id={"check_in:" + props.Name}
+					type="text"
+					placeholder="Enter Value" />
+				<button className="checkBtn"
+					type="button"
+					onClick={props.onCheckInClick} >
+					Check In
+				</button>
 			</div>
 			{/* Check Out*/}
 			<div className="column">
-				<input className="hwInput" type="text" placeholder="Enter Value" />
-				<button className="checkBtn" type="button" onClick={props.onCheckOutClick}>Check Out</button>
+				<input className="hwInput"
+					id={"check_out:" + props.Name}
+					type="text"
+					placeholder="Enter Value" />
+				<button className="checkBtn"
+					type="button"
+					onClick={props.onCheckOutClick} >
+					Check Out
+				</button>
 			</div>
 			{/* Join or Leave */}
 			<div className="column">
@@ -223,7 +284,7 @@ function Project(props) {
 	)
 }
 
-// ProjectAdder: Adds a user input to project data
+/* ProjectAdder: Adds a user input to project data */
 function ProjectAdder(props) { // TODO: NEED TO IMPLEMENT ADDING TO MEMORY GIVEN INPUT
 	return (
 		<div className="project">
