@@ -2,15 +2,18 @@
 	text-align: left;
 }
 
-.App-header {
-	background-color: #282c34;
-	min-height: 100vh;
+.app_header {
+	/* Structure and Settings */
 	display: flex;
 	flex-direction: column;
-	align-items: left;
+	background-color: #282c34;
+	/* Size */
+	min-height: 100vh;
+	/* Alignment */
+	align-items: center;
 	justify-content: left;
-	font-size: calc(10px + 2vmin);
 	color: white;
+	overflow: hidden;
 }
 
 /* Project Styles */

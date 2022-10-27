@@ -35,12 +35,14 @@ class Projects extends React.Component {
 	}
 }
 
+/* Return data at given url */
 async function GetData(url) {
 
+	// fetch from url, but wait for the data
 	const response = await fetch(url);
-
+	// obtain json and parse it
 	var data = JSON.parse(JSON.stringify(await response.json()));
-	console.log(data);
+	// return the json
 	return data;
 }
 
@@ -56,7 +58,12 @@ class ProjectData extends React.Component {
 			project_list: []
 		};
 
-		GetData("init")
+		// get and print data from "init"
+		const data = GetData("init");
+		console.log("Project 0: " + data.proj0[PROJ_NAME]);
+		console.log("Project 1: " + data.proj1[PROJ_NAME]);
+		console.log("Project 2: " + data.proj2[PROJ_NAME]);
+		console.log("Project 3: " + data.proj3[PROJ_NAME]);
 
 		this.state.project_list.push([0, "Project 0", "User 1", "HWSet 1: 50/100", "HWSet 2: 30/100"])
 		this.state.project_list.push([1, "Project 1", "User 2", "HWSet 1: 50/100", "HWSet 2: 0/100"])
