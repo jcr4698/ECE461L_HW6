@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './App.css';
 
 // window.location.href.split('/')[2]
@@ -11,24 +11,6 @@ const HW2_CAP = 5;
 
 // App: Function that runs Project
 function App() {
-
-	useEffect(() => {
-		fetch("/init").then(response =>
-			response.json().then(data => {
-				console.log(data);
-			})
-		);
-	}, []);
-	// fetch("/init").then(async response => {
-	// 	try {
-	// 	 const data = await response.json()
-	// 	 console.log('response data?', data)
-	//    } catch(error) {
-	// 	 console.log('Error happened here!')
-	// 	 console.error(error)
-	//    }
-	// })
-
 	return (
 		<div className="App">
 			<header className="App-header">
@@ -53,15 +35,6 @@ class Projects extends React.Component {
 	}
 }
 
-async function GetData(url) {
-
-	const response = await fetch(url);
-
-	var data = JSON.parse(JSON.stringify(await response.json()));
-	console.log(data);
-	return data;
-}
-
 // Place data into a stored list
 class ProjectData extends React.Component {
 
@@ -74,34 +47,20 @@ class ProjectData extends React.Component {
 			project_list: []
 		};
 
-		GetData("/init");
+		fetch("/test")
+		.then(response => response.json())
+		.then(respJson => {
+			const data = JSON.parse(JSON.stringify(respJson.json()))
+			console.log(data.proj0)
+			console.log(data.proj1)
+			console.log(data.proj2)
+			console.log(data.proj3)
+		})
 
-		fetch("/init").then(response =>
-			response.json().then(resJson => {
-				const data = JSON.parse(JSON.stringify(resJson));
-				this.state.project_list.push([0, data.proj0[PROJ_NAME],
-												 data.proj0[USER],
-												 "HWSet 1:" + toString(data.proj0[HW1_AVAIL]) + "/" + data.proj0[HW1_CAP],
-												 "HWSet 2:" + toString(data.proj0[HW2_AVAIL]) + "/" + data.proj0[HW2_CAP]])
-				this.state.project_list.push([1, data.proj1[PROJ_NAME],
-												 data.proj1[USER],
-												 "HWSet 1:" + toString(data.proj1[HW1_AVAIL]) + "/" + data.proj1[HW1_CAP],
-												 "HWSet 2:" + toString(data.proj1[HW2_AVAIL]) + "/" + data.proj1[HW2_CAP]])
-				this.state.project_list.push([2, data.proj2[PROJ_NAME],
-												 data.proj2[USER],
-												 "HWSet 1:" + toString(data.proj2[HW1_AVAIL]) + "/" + data.proj2[HW1_CAP],
-												 "HWSet 2:" + toString(data.proj2[HW2_AVAIL]) + "/" + data.proj2[HW2_CAP]])
-				this.state.project_list.push([1, data.proj3[PROJ_NAME],
-												 data.proj3[USER],
-												 "HWSet 1:" + toString(data.proj3[HW1_AVAIL]) + "/" + data.proj3[HW1_CAP],
-												 "HWSet 2:" + toString(data.proj3[HW2_AVAIL]) + "/" + data.proj3[HW2_CAP]])
-				
-			})
-		);
-		// this.state.project_list.push([0, "Project 0", "User 1", "HWSet 1: 50/100", "HWSet 2: 30/100"])
-		// this.state.project_list.push([1, "Project 1", "User 2", "HWSet 1: 50/100", "HWSet 2: 0/100"])
-		// this.state.project_list.push([2, "Project 2", "User 3", "HWSet 1: 50/50", "HWSet 2: 30/40"])
-		// this.state.project_list.push([3, "Project 3", "User 4", "HWSet 1: 50/70", "HWSet 2: 30/50"])
+		this.state.project_list.push([0, "Project 0", "User 1", "HWSet 1: 50/100", "HWSet 2: 30/100"])
+		this.state.project_list.push([1, "Project 1", "User 2", "HWSet 1: 50/100", "HWSet 2: 0/100"])
+		this.state.project_list.push([2, "Project 2", "User 3", "HWSet 1: 50/50", "HWSet 2: 30/40"])
+		this.state.project_list.push([3, "Project 3", "User 4", "HWSet 1: 50/70", "HWSet 2: 30/50"])
 	}
 
 	// Create a single project with given data
