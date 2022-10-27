@@ -35,6 +35,15 @@ class Projects extends React.Component {
 	}
 }
 
+async function GetData(url) {
+
+	const response = await fetch(url);
+
+	var data = JSON.parse(JSON.stringify(await response.json()));
+	console.log(data);
+	return data;
+}
+
 // Place data into a stored list
 class ProjectData extends React.Component {
 
@@ -47,15 +56,7 @@ class ProjectData extends React.Component {
 			project_list: []
 		};
 
-		fetch("/test")
-		.then(response => response.json())
-		.then(respJson => {
-			const data = JSON.parse(JSON.stringify(respJson.json()))
-			console.log(data.proj0)
-			console.log(data.proj1)
-			console.log(data.proj2)
-			console.log(data.proj3)
-		})
+		GetData("init")
 
 		this.state.project_list.push([0, "Project 0", "User 1", "HWSet 1: 50/100", "HWSet 2: 30/100"])
 		this.state.project_list.push([1, "Project 1", "User 2", "HWSet 1: 50/100", "HWSet 2: 0/100"])
