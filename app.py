@@ -10,14 +10,16 @@ def index():
 
 """ Test out sending data to frontend. """
 @app.route("/init")
-def test():
-    return jsonify({"proj0": ["Project 0", "User 1", 50, 100, 30, 100],  # "Project 0", "User 1", "HWSet 1: 50/100", "HWSet 2: 30/100"
+def init_data():
+    respJson = jsonify({"proj0": ["Project 0", "User 1", 50, 100, 30, 100],  # "Project 0", "User 1", "HWSet 1: 50/100", "HWSet 2: 30/100"
                     "proj1": ["Project 1", "User 2", 20, 80, 0, 100],    # "Project 1", "User 2", "HWSet 1: 50/100", "HWSet 2: 0/100"
                     "proj2": ["Project 2", "User 3", 50, 50, 30, 40],    # "Project 2", "User 3", "HWSet 1: 50/50", "HWSet 2: 30/40"
                     "proj3": ["Project 3", "User 4", 50, 70, 30, 80]})   # "Project 3", "User 4", "HWSet 1: 50/70", "HWSet 2: 30/50"
+    print(respJson)
+    return respJson
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port=os.environ.get('PORT', 80))
+    app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
 
 # Task 1 Code
 
