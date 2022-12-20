@@ -181,17 +181,18 @@ class ProjectData extends React.Component {
 async function GetInitialData(props) {
 
 	// fetch from url, but wait for the data
-	const response = await fetch("init");
+	const response = await fetch("/init");
 	// obtain json and parse it
-	var data = JSON.parse(JSON.stringify(await response.json()));
+	// var data = JSON.parse(JSON.stringify(await response.json()));
+	console.log(await response.json());
 	// return the json
 
-	console.log("Project 0: " + data.proj0[PROJ_NAME]);
-	console.log("Project 1: " + data.proj1[PROJ_NAME]);
-	console.log("Project 2: " + data.proj2[PROJ_NAME]);
-	console.log("Project 3: " + data.proj3[PROJ_NAME]);
+	// console.log("Project 0: " + data.proj0[PROJ_NAME]);
+	// console.log("Project 1: " + data.proj1[PROJ_NAME]);
+	// console.log("Project 2: " + data.proj2[PROJ_NAME]);
+	// console.log("Project 3: " + data.proj3[PROJ_NAME]);
 
-	return data;
+	// return data;
 }
 
 /* Return data at given url */
@@ -201,17 +202,18 @@ async function GetCheckInData(project_list, val) {
 	// console.log(val);
 
 	const newData = {"HWSet1": val, "HWSet2": 50};
-	console.log(newData);
 
-	// const result = await fetch('/hardware', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(newData)
-    // })
+	alert(val + " hardware checked in");
 
-	// const resultInJson = await result.json();
+	const result = await fetch('/check_in', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newData)
+    })
+
+	const resultInJson = await result.json();
 	// console.log(resultInJson);
 
 	// // fetch from url, but wait for the data
